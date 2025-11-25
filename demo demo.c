@@ -239,7 +239,7 @@ void editProduct() {
     int index;
 
     
-    while (true) {
+         while (true) {
         printf("Nhap ma san pham can cap nhat thong tin: ");
         fgets(editid, sizeof(editid), stdin);
         remoNewLine(editid);
@@ -251,6 +251,7 @@ void editProduct() {
         }
         break;
     }
+
 
     printf("---- Cap nhat thong tin san pham [%s] ----\n", editid);
 
@@ -330,22 +331,28 @@ void editProduct() {
 
 void changestatus() {
     char changeid[50];
-    int index;
+    int index=-1;
 
     
-    while (true) {
+   
         printf("Nhap id san pham can thay doi trang thai: ");
         fgets(changeid, sizeof(changeid), stdin);
         remoNewLine(changeid);
 
-        index = indexByproductId(changeid);
+        for (int i=0;i<size;i++){
+        if(strcmp(listproduct[i].productId,changeid)==0){
+        index=i;
+        	break;
+        	}
+        	}
         if (index == -1) {
-            printf("San pham [%s] khong ton tai trong danh sach!\n", changeid);
-            continue;
-        }
-        break;
-    }
+          printf("San pham [%s] khong ton tai trong danh sach!\n", changeid);
+          return;
+          }
+	  
 
+        
+    
     printf("Trang thai hien tai cua san pham [%s]: %d\n", listproduct[index].productId, listproduct[index].status);
 
     
@@ -375,29 +382,35 @@ void changestatus() {
     }
 }
 
+void findproduct(){
+	
+    char key[50];
+    int found = 0;
 
-void findproduct() {
-    char needid[50];
-    int index;
+    printf("Nhap tu khoa (ID hoac ten san pham): ");
+    fgets(key, 50, stdin);
+    remoNewLine(key);
+    printf("\n=== Ket qua tim kiem cho tu khoa: \"%s\" ===\n", key);
+    for (int i = 0; i < size; i++) {
 
-    while (true) {
-        printf("Nhap ma san phan can tim: ");
-        fgets(needid, sizeof(needid), stdin);
-        remoNewLine(needid);
+        if (strstr(listproduct[i].productId, key) != NULL ||
+            strstr(listproduct[i].name, key) != NULL)
+        {
+            
+            printf(" - ID : %s\n", listproduct[i].productId);
+            printf(" - Ten: %s\n", listproduct[i].name);
+            printf(" - Don vi: %s\n", listproduct[i].unit);
+            printf(" - So luong: %d\n", listproduct[i].qty);
+            printf(" - Trang thai: %d\n", listproduct[i].status);
 
-        index = indexByproductId(needid);
-        if (index == -1) {
-            printf("San pham [%s] khong ton tai trong danh sach!\n", needid);
-            continue;
+            found++;
         }
-        break;
     }
 
-    printf("Ma san pham: %s\n", listproduct[index].productId);
-    printf("Ten san pham: %s\n", listproduct[index].name);
-    printf("Don vi: %s\n", listproduct[index].unit);
-    printf("So luong ton kho: %d\n", listproduct[index].qty);
-    printf("Trang thai: %s\n", listproduct[index].status == 1 ? "Con su dung" : "Het han");
+
+    if (found == 0) {
+        printf("\n>>> Khong tim thay san pham nao phu hop voi tu khoa \"%s\"!\n", key);
+    } else {
+        printf("\n>>> Tim thay tong cong %d san pham.\n", found);
+    }
 }
-
-
