@@ -381,7 +381,7 @@ void findproduct() {
     int index;
 
     while (true) {
-        printf("Nhap ma hoac ten san phan can tim: ");
+        printf("Nhap ma san phan can tim: ");
         fgets(needid, sizeof(needid), stdin);
         remoNewLine(needid);
 
@@ -393,7 +393,6 @@ void findproduct() {
         break;
     }
 
-    printf("Thong tin san pham:\n");
     printf("Ma san pham: %s\n", listproduct[index].productId);
     printf("Ten san pham: %s\n", listproduct[index].name);
     printf("Don vi: %s\n", listproduct[index].unit);
