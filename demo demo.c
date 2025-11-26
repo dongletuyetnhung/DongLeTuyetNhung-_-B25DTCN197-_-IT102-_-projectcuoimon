@@ -482,32 +482,32 @@ void sortProduct(){
 	scanf("%d",&choice);
 	switch(choice){
 		case 1:
-			for(int i=0;i<size-1;i++){
-				for(int j=i+1;j<size;j++){
-					if(strcmp( listproduct[i].name, listproduct[j].name)>0){
-						struct Product temp= listproduct[i];
-						 listproduct[i]= listproduct[j];
-					 listproduct[j]=temp;
-					}
-				}
-			}
-			printf("Da sap xep theo ten (A-Z) thanh cong!!\n");
-			break;
+		for(int i=0;i<size-1;i++){
+		for(int j=i+1;j<size;j++){
+		if(strcmp( listproduct[i].name, listproduct[j].name)>0){
+		struct Product temp= listproduct[i];
+		listproduct[i]= listproduct[j];
+		listproduct[j]=temp;
+		}
+		}
+		}
+		printf("Da sap xep theo ten (A-Z) thanh cong!!\n");
+		break;
 		case 2:
-			for(int i=0;i<size-1;i++){
-				for(int j=i+1;j<size;j++){
-					if( listproduct[i].qty> listproduct[j].qty){
-						struct Product temp= listproduct[i];
-						 listproduct[i]= listproduct[j];
-					 listproduct[j]=temp;
-					}
-				}
-			}
-			printf("Da sap xep theo so luong thanh cong!!\n");
-			break;
+		for(int i=0;i<size-1;i++){
+		for(int j=i+1;j<size;j++){
+		if( listproduct[i].qty> listproduct[j].qty){
+		struct Product temp= listproduct[i];
+		listproduct[i]= listproduct[j];
+		listproduct[j]=temp;
+		}
+		}
+		}
+		printf("Da sap xep theo so luong thanh cong!!\n");
+		break;
 		default:
-			printf("Lua chon khong hop le!!\n");
-			return;
+		printf("Lua chon khong hop le!!\n");
+		return;
 	}
 	printf("+------------+------------------------------+------------+-------------------+------------------+\n");
 	printf("| Ma         | Ten                          | Don vi     | So luong ton kho  | Trang thai       |\n");
@@ -518,7 +518,7 @@ void sortProduct(){
 	     listproduct[i].name,
 	     listproduct[i].unit,
 	     listproduct[i].qty,
-	    listproduct[i].status?"Con su dung":"Het han su dung");
+	     listproduct[i].status?"Con su dung":"Het han su dung");
 		printf("+------------+------------------------------+------------+-------------------+------------------+\n");
 	}
 }
