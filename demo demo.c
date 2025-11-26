@@ -27,6 +27,9 @@ void insertProduct();
 void editProduct();
 void changestatus();
 void findproduct();
+void showproductPaginate();
+void sortProduct();
+
 int main() {
     int choice;
     while (true) {
@@ -64,10 +67,11 @@ int main() {
                 findproduct();
                 break;
             case 5:
-                printf("Chuc nang chua duoc phat trien.\n");
+                showproductPaginate();
                 break;
             case 6:
-                printf("Chuc nang chua duoc phat trien.\n");
+                sortProduct();
+  
                 break;
             case 7:
                 printf("Chuc nang chua duoc phat trien.\n");
@@ -88,14 +92,14 @@ int main() {
 
 
 void remoNewLine(char str[]) {
-    str[strcspn(str, "\n")] = '\0';
+          str[strcspn(str, "\n")] = '\0';
 }
 
 
 int indexByproductId(char findId[]) {
-    for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
         if (strcmp(listproduct[i].productId, findId) == 0) {
-            return i;
+        return i;
         }
     }
     return -1;
@@ -103,9 +107,9 @@ int indexByproductId(char findId[]) {
 
 
 int indexByname(char findname[]) {
-    for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
         if (strcmp(listproduct[i].name, findname) == 0) {
-            return i;
+        return i;
         }
     }
     return -1;
@@ -113,10 +117,10 @@ int indexByname(char findname[]) {
 
 
 bool isValidName(char str[]) {
-    for (int i = 0; str[i] != '\0'; i++) {
+        for (int i = 0; str[i] != '\0'; i++) {
         char c = str[i];
         if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == ' ')) {
-            return false;
+        return false;
         }
     }
     return true;
@@ -124,10 +128,10 @@ bool isValidName(char str[]) {
 
 
 bool isAlphaString(char str[]) {
-    for (int i = 0; str[i] != '\0'; i++) {
+        for (int i = 0; str[i] != '\0'; i++) {
         char c = str[i];
         if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))) {
-            return false;
+        return false;
         }
     }
     return true;
@@ -135,7 +139,7 @@ bool isAlphaString(char str[]) {
 
 
 void insertProduct() {
-    if (size == MAX) {
+        if (size == MAX) {
         printf("Mang da day, khong the chen them!\n");
         return;
     }
@@ -414,3 +418,109 @@ void findproduct(){
         printf("\n>>> Tim thay tong cong %d san pham.\n", found);
     }
 }
+void showproductPaginate(){
+    int pagenumber=1;
+    int itemPerPage = 10;
+    int index=0;
+    int result=size/itemPerPage;
+    int totalpage=(size%itemPerPage==0)?result:result+1;
+    while(1){
+        printf("Moi ban nhap so trang can xem(1-%d):",totalpage);
+        scanf("%d",&pagenumber);
+        while (getchar() != '\n'); // xoa enter cua scanf o tren
+        index = (pagenumber - 1) * itemPerPage; // capnhat lai index moi
+        printf("Trang %d/%d :\n\n", pagenumber, totalpage); // trang dau 1/so trang
+        while (index < (pagenumber - 1) * itemPerPage + itemPerPage && index < size) {
+            printf(" - ID : %s\n", listproduct[index].productId);
+            printf(" - Ten: %s\n", listproduct[index].name);
+            printf(" - Don vi: %s\n", listproduct[index].unit);
+            printf(" - So luong: %d\n", listproduct[index].qty);
+            printf(" - Trang thai: %d\n\n", listproduct[index].status);
+            index++;
+        }
+          if (pagenumber >= totalpage) {
+            printf("danh sach san pham rong!\n");
+        } else {
+          printf("Ban co muon xem tiep trang sau khong? (1-co/0-khong): ");
+          char ch = getchar(); 
+          while(getchar() != '\n'); // xoa phan enter con lai
+
+          if (ch == '1' || ch == '1') {
+          pagenumber++;   
+          continue;//chuyen sang trang tiep sau khi nhap so trang
+            }
+        }
+          printf("Ban co muon nhap trang khac khong? (1-co/0-khong): ");
+          char ch2 = getchar(); // dùng d? nh?p yes ho?c no
+          while(getchar() != '\n'); // xóa buffer
+          if (ch2 == '1' ) {
+          int newPage;
+          do {
+          printf("Nhap trang (1-%d): ", totalpage);
+          scanf("%d", &newPage);
+          while (getchar() != '\n'); // xoa enter
+        } while (newPage < 1 || newPage > totalpage);
+          pagenumber = newPage; 
+          continue;//chon trang khac sau khi nhap so trang
+        }
+         printf("Thoat xem danh sach!\n");
+         break;
+    }
+}
+void sortProduct(){
+	
+	if(size==0){
+		printf("Danh sach hang hoa rong!!\n");
+		return;
+	}
+	int choice;
+	printf("+--------SAP XEP HANG HOA-------+\n");
+	printf("|1. Sap xep theo ten (A-Z).     |\n");
+	printf("|2. Sap xep tang theo so luong. |\n");
+	printf("+-------------------------------+\n");
+	printf("Xin moi nhap lua chon: ");
+	scanf("%d",&choice);
+	switch(choice){
+		case 1:
+			for(int i=0;i<size-1;i++){
+				for(int j=i+1;j<size;j++){
+					if(strcmp( listproduct[i].name, listproduct[j].name)>0){
+						struct Product temp= listproduct[i];
+						 listproduct[i]= listproduct[j];
+					 listproduct[j]=temp;
+					}
+				}
+			}
+			printf("Da sap xep theo ten (A-Z) thanh cong!!\n");
+			break;
+		case 2:
+			for(int i=0;i<size-1;i++){
+				for(int j=i+1;j<size;j++){
+					if( listproduct[i].qty> listproduct[j].qty){
+						struct Product temp= listproduct[i];
+						 listproduct[i]= listproduct[j];
+					 listproduct[j]=temp;
+					}
+				}
+			}
+			printf("Da sap xep theo so luong thanh cong!!\n");
+			break;
+		default:
+			printf("Lua chon khong hop le!!\n");
+			return;
+	}
+	printf("+------------+------------------------------+------------+-------------------+------------------+\n");
+	printf("| Ma         | Ten                          | Don vi     | So luong ton kho  | Trang thai       |\n");
+	printf("+------------+------------------------------+------------+-------------------+------------------+\n");
+	for(int i=0;i<size;i++){
+		printf("| %-10s | %-28s | %-10s | %-17d | %-16s |\n",
+	     listproduct[i].productId,
+	     listproduct[i].name,
+	     listproduct[i].unit,
+	     listproduct[i].qty,
+	    listproduct[i].status?"Con su dung":"Het han su dung");
+		printf("+------------+------------------------------+------------+-------------------+------------------+\n");
+	}
+}
+
+
