@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-
 #define MAX 100
+#define MAX_TRANS 100
 
 struct Product {
     char productId[10];
@@ -16,8 +16,38 @@ struct Product listproduct[MAX] = {
     {"P001", "Sua Hop Vinamilk", "Hop", 120, 1},
     {"P002", "Mi Tom Hao Hao", "Hop", 350, 1},
     {"P003", "Gao Thom ST25", "Kg", 80, 0},
+    {"P004", "Khoai Tay Chien Dong Lanh", "Goi", 290, 1},
+    {"P005", "Hat Dieu Rang Muoi", "Hop", 90, 1},
+    {"P006", "Banh Quy Cosy", "Hop", 210, 1},
+    {"P007", "Keo Socola KitKat", "Goi", 140, 1},
+    {"P008", "Mi Ly Modern", "Ly", 380, 1},
+    {"P009", "Thit Heo Xay Dong Lanh", "Kg", 60, 1},
+    {"P010", "Trung Ga CP", "Vi", 75, 1},
+    {"P011", "Nuoc Mam Nam Ngu", "Chai", 95, 1},
+    {"P012", "Nuoc Tuong Maggi", "Chai", 90, 1},
+    {"P013", "Muoi Iot", "Kg", 200, 1},
+    {"P014", "Bot Ngot Mi Chinh", "Goi", 220, 1},
+    {"P015", "Duong Cat Trang", "Kg", 150, 1},
+    {"P016", "Dau An Neptune", "Lit", 110, 1},
+    {"P017", "Dau An Huong Duong", "Lit", 90, 1},
+    {"P018", "Sua Hop Vinamilk", "Hop", 120, 1},
+    {"P019", "Sua Tuoi TH True Milk", "Hop", 320, 1},
+    {"P020", "Nuoc Ngot Coca Cola", "Chai", 170, 1},
+    {"P021", "Bia Heineken", "Lon", 260, 1},
+    {"P022", "Ca Phe Hoa Tan G7", "Hop", 175, 1},
+    {"P023", "Nuoc Loc Aquafina", "Thung", 105, 1},
+    {"P024", "Dau Goi Sunsilk", "Chai", 160, 1},
+    {"P025", "Kem Danh Rang P/S", "Tuyt", 180, 1},
+    {"P026", "Nuoc Xa Vai Comfort", "Tui", 130, 1},
+    {"P027", "Bot Giat Omo", "Tui", 100, 1},
+    {"P028", "Giay Ve Sinh", "Cuon", 500, 1},
+    {"P029", "Xa Bong Tam Lifebuoy", "Cuc", 210, 1},
+    {"P030", "Dao Got Hoa Qua", "Cai", 40, 1},
+    {"P031", "Nuoc Rua Chen Sunlight", "Chai", 250, 1},
+    {"P032", "Ban Chai Danh Rang Colgate", "Cai", 120, 1},
+
 };
-int size = 3;
+int size = 32;
 void remoNewLine(char str[]);
 int indexByproductId(char findId[]);
 int indexByname(char findname[]);
@@ -74,10 +104,10 @@ int main() {
   
                 break;
             case 7:
-                printf("Chuc nang chua duoc phat trien.\n");
+                inoutproduct();
                 break;
             case 8:
-                printf("Chuc nang chua duoc phat trien.\n");
+                showTransactionHistory();
                 break;
             case 9:
                 printf("Thoat chuong trinh.\n");
@@ -243,7 +273,7 @@ void editProduct() {
     int index;
 
     
-         while (true) {
+         
         printf("Nhap ma san pham can cap nhat thong tin: ");
         fgets(editid, sizeof(editid), stdin);
         remoNewLine(editid);
@@ -251,10 +281,10 @@ void editProduct() {
 
         if (index == -1) {
             printf("San pham [%s] khong ton tai trong danh sach!\n", editid);
-            continue;
+          return;  
         }
-        break;
-    }
+       
+    
 
 
     printf("---- Cap nhat thong tin san pham [%s] ----\n", editid);
@@ -428,7 +458,7 @@ void showproductPaginate(){
         printf("Moi ban nhap so trang can xem(1-%d):",totalpage);
         scanf("%d",&pagenumber);
         while (getchar() != '\n'); // xoa enter cua scanf o tren
-        index = (pagenumber - 1) * itemPerPage; // capnhat lai index moi
+        index = (pagenumber - 1) * itemPerPage; // cap nhat lai index moi
         printf("Trang %d/%d :\n\n", pagenumber, totalpage); // trang dau 1/so trang
         while (index < (pagenumber - 1) * itemPerPage + itemPerPage && index < size) {
             printf(" - ID : %s\n", listproduct[index].productId);
@@ -451,7 +481,7 @@ void showproductPaginate(){
             }
         }
           printf("Ban co muon nhap trang khac khong? (1-co/0-khong): ");
-          char ch2 = getchar(); // dùng d? nh?p yes ho?c no
+          char ch2 = getchar(); // dùng de nhap co hoac khong
           while(getchar() != '\n'); // xóa buffer
           if (ch2 == '1' ) {
           int newPage;
@@ -492,6 +522,7 @@ void sortProduct(){
 		}
 		}
 		printf("Da sap xep theo ten (A-Z) thanh cong!!\n");
+		showproductPaginate();
 		break;
 		case 2:
 		for(int i=0;i<size-1;i++){
@@ -504,6 +535,7 @@ void sortProduct(){
 		}
 		}
 		printf("Da sap xep theo so luong thanh cong!!\n");
+		showproductPaginate();
 		break;
 		default:
 		printf("Lua chon khong hop le!!\n");
@@ -522,5 +554,165 @@ void sortProduct(){
 		printf("+------------+------------------------------+------------+-------------------+------------------+\n");
 	}
 }
+struct Transaction {
+    char transId[10];
+    char productId[10];
+    char type[5];  // "IN" hoac "OUT"
+    int qty;
+    char date[15]; // dd/mm/yyyy
+};
 
+struct Transaction listTrans[MAX_TRANS];
+int transize = 0; 
+
+void inoutproduct(){
+	int choice2;
+	char pid[50];//chuoi nhap ma san oham trung gian de neu cap nhat that bai id cx ko bi thay doi
+	int qty;
+	int pos;
+	char transId[20]; // Chuoi luu ma giao dic
+	char numberStr[10]; // Chuoi trung gian di chuyen so sang chuoi
+	printf("1.Nhap hang(In)\n");
+	printf("2.Xuat hang(Out)\n");
+	printf("Moi ban lua chon(1.Xuat hang/2.Xuat hang)\n");
+	scanf("%d",&choice2);
+	getchar();
+	switch(choice2){
+		case 1:
+		printf("Moi ban nhap ma san pham:\n");
+		do{
+		fgets(pid,50,stdin);
+		remoNewLine(pid);
+		if(strlen(pid)==0){
+			printf("Ma san pham khong duoc de trong\n");
+			continue;
+		}
+		}while(strlen(pid)==0);
+		 pos=indexByproductId(pid);
+		if(pos<0){
+			printf("San pham khong ton tai trong danh sach\n");
+			return;
+		}
+        printf("Nhap so luong nhap: ");
+        if (scanf("%d", &qty) != 1 || qty <= 0) {
+            printf("So luong khong hop le!\n");
+            while (getchar() != '\n');
+            return;
+        }
+        while (getchar() != '\n');
+        listproduct[pos].qty += qty;
+        itoa(transize + 1, numberStr, 10); // chuyen so sang chuoi
+        if(transize + 1 < 10){
+            strcpy(transId, "T00");
+        } else if(transize + 1 < 100){
+            strcpy(transId, "T0");
+        } else {
+            strcpy(transId, "T");
+        }// ma giao dich tu dong tang
+        strcat(transId, numberStr); 
+        strcpy(listTrans[transize].transId, transId);
+        strcpy(listTrans[transize].productId, pid);
+        strcpy(listTrans[transize].type, "IN");
+        listTrans[transize].qty = qty;
+        printf("Nhap thoi gian giao dich (dd/mm/yyyy): ");
+		fgets(listTrans[transize].date, sizeof(listTrans[transize].date), stdin);
+		remoNewLine(listTrans[transize].date);
+        transize++;
+        printf("Nhap hang hoa %s thanh cong!So luong hang duoc tang len:%d.\n", pid,qty);
+        break;
+		case 2:
+		printf("Nhap ma san pham: ");
+        fgets(pid, sizeof(pid), stdin);
+        remoNewLine(pid);
+       do{
+	    if (strlen(pid) == 0) {
+            printf("Ma san pham khong duoc de trong!\n");
+            return;
+        }
+    	}while(strlen(pid) == 0);
+         pos = indexByproductId(pid);
+        if (pos == -1) {
+            printf("San pham %s khong ton tai trong danh sach!\n", pid);
+            return;
+        }
+        if (listproduct[pos].status == 0) {
+			    printf("Hang hoa da ngung kinh doanh, khong the giao dich!\n");
+			    return;
+			}
+        printf("Nhap so luong xuat: ");
+        if (scanf("%d", &qty) != 1 || qty <= 0) {
+            printf("So luong xuat khong hop le!\n");
+            while (getchar() != '\n');
+            return;
+        }
+         while(getchar() != '\n');
+        if (qty > listproduct[pos].qty) {
+            printf("So luong xuat hang hoa %s vuot qua so luong hien co!\n", pid);
+            return;
+        }
+        listproduct[pos].qty -= qty;
+         itoa(transize + 1, numberStr, 10); // chuyen so sang chuoi
+        if(transize + 1 < 10){
+        	strcpy(transId, "T00");
+        } else if(transize + 1 < 100){
+            strcpy(transId, "T0");
+        } else {
+            strcpy(transId, "T");
+        }// ma giao dich tu dong tang
+        strcat(transId, numberStr); // Noi so vao chuoi
+        strcpy(listTrans[transize].transId, transId);
+        strcpy(listTrans[transize].productId, pid);
+        strcpy(listTrans[transize].type, "OUT");
+        listTrans[transize].qty = qty;
+        printf("Nhap thoi gian giao dich (dd/mm/yyyy): \n");
+		fgets(listTrans[transize].date, sizeof(listTrans[transize].date), stdin);
+		remoNewLine(listTrans[transize].date);
+        
+
+        transize++;
+        printf("Xuat hang hoa %s thanh cong!So luong hang hoa trong danh sach giam:%d.\n", pid,qty);
+        break;
+
+    default:
+        printf("Lua chon khong hop le!\n");
+    
+	}	
+}
+void showTransactionHistory() {
+    char productId[10];
+    printf("Nhap ma hang hoa can xem lich su giao dich: ");
+    fgets(productId, sizeof(productId), stdin);
+    remoNewLine(productId);
+
+    if (strlen(productId) == 0) {
+        printf("Ma hang hoa khong duoc de trong!\n");
+        return;
+    }
+
+    int found = 0;
+    printf("\n=== Lich su giao dich hang hoa [%s] ===\n", productId);
+    printf("+----------+------------+-------+-------+------------+\n");
+    printf("| Ma GD    | Ma Hang   | Loai  | So luong | Ngay     |\n");
+    printf("+----------+------------+-------+-------+------------+\n");
+
+    for (int i = 0; i < transize; i++) {
+        if (strcmp(listTrans[i].productId, productId) == 0) {
+            printf("| %-8s | %-10s | %-5s | %-7d | %-10s |\n",
+                   listTrans[i].transId,
+                   listTrans[i].productId,
+                   listTrans[i].type,
+                   listTrans[i].qty,
+                   listTrans[i].date);
+            found++;
+        }
+    }
+
+    printf("+----------+------------+-------+-------+------------+\n");
+
+    if (found == 0) {
+        printf("Vat tu [%s] chua co giao dich nhap/xuat.\n", productId);
+    } else {
+        printf("Tong cong %d giao dich.\n", found);
+    }
+}
 
