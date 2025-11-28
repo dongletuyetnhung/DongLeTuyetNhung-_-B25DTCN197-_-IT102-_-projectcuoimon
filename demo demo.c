@@ -709,7 +709,7 @@ void showTransactionHistory() {
 
     for (int i = 0; i < transize; i++) {
         if (strcmp(listTrans[i].productId, productId) == 0) {
-            printf("| %-8s | %-10s | %-5s | %-7d | %-10s |\n",
+            printf("| %-8s | %-9s | %-5s | %-8d | %-6s |\n",
                    listTrans[i].transId,
                    listTrans[i].productId,
                    listTrans[i].type,
@@ -719,7 +719,7 @@ void showTransactionHistory() {
         }
     }
 
-    printf("+----------+------------+-------+-------+------------+\n");
+    printf("+--------------------------------------------------+\n");
 
     if (found == 0) {
         printf("Vat tu [%s] chua co giao dich nhap/xuat.\n", productId);
